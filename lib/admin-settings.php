@@ -55,6 +55,19 @@ function fe_stop_emails_admin_init(){
 		'fe_stop_emails',
 		'fe_stop_emails_main'
 	);
+	add_settings_section(
+		'fe_stop_emails_appearance',
+		__( 'Appearance', 'stop-emails' ),
+		null,
+		'fe_stop_emails'
+	);
+	add_settings_field(
+		'hide-admin-notifications',
+		__( 'Hide Admin Notifications', 'stop-emails' ),
+		'fe_stop_emails_setting_hide_admin_notifications_cb',
+		'fe_stop_emails',
+		'fe_stop_emails_appearance'
+	);
 }
 
 // Draw the section header
@@ -88,6 +101,30 @@ function fe_stop_emails_setting_radio_btn() {
 	$html .= '<label for="fe_stop_emails_log_email_true">';
 	$html .= '<input type="radio" id="fe_stop_emails_log_email_true" name="fe_stop_emails_options[log-email]" value="1"' . checked( 1, $log_emails, false ) . '/>';
 	$html .= __( 'Log stopped emails to the PHP Error Log', 'stop-emails' );
+	$html .= '</label>';
+	$html .= '</p>';
+
+	$html .= '</fieldset>';
+	echo $html;
+}
+
+// Display and fill the form field
+function fe_stop_emails_setting_hide_admin_notifications_cb() {
+	$options = get_option( 'fe_stop_emails_options' );
+
+	if( isset( $options['hide-admin-notifications'] ) ) {
+		$hide_admin_notifications = ( $options['hide-admin-notifications'] ? 1 : 0 );
+	} else {
+		$hide_admin_notifications = 0;
+	}
+
+	$html = '';
+	$html .= '<fieldset>';
+
+	$html .= '<p>';
+	$html .= '<label for="fe_stop_emails_hide_admin_notifications">';
+	$html .=  '<input type="checkbox" id="fe_stop_emails_hide_admin_notifications" name="fe_stop_emails_options[hide-admin-notifications]" value="1" ' . checked( $hide_admin_notifications, 1, false ) . '/>';
+	$html .= __( 'Hide Admin Notifications', 'stop-emails' );
 	$html .= '</label>';
 	$html .= '</p>';
 

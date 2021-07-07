@@ -203,6 +203,29 @@ class Fe_Stop_Emails {
 	}
 
 	/**
+	 * Should hide admin notifications.
+	 *
+	 * @since 0.8.0
+	 *
+	 * @return bool
+	 */
+	public function should_hide_admin_notifications() {
+		$options = get_option( 'fe_stop_emails_options' );
+
+		if ( $options && isset( $options['hide-admin-notifications'] ) ) {
+			// Use value from options.
+			$hide_admin_notifications = $options['hide-admin-notifications'];
+		} else {
+			// Default value.
+			$hide_admin_notifications = 0;
+		}
+
+		$hide_admin_notifications = apply_filters( 'fe_stop_emails_hide_admin_notifications', $hide_admin_notifications );
+
+		return (bool) $hide_admin_notifications;
+	}
+
+	/**
 	 * Display Warning that emails are being stopped.
 	 *
 	 * Display admin notice warning that emails are being
@@ -213,6 +236,8 @@ class Fe_Stop_Emails {
 	 * @since 0.8.0
 	 */
 	public function warning() {
+		if ( $this->should_hide_admin_notifications() ) return;
+
 		echo "\n<div class='error'><p>";
 		echo '<strong>';
 		if ( $this->should_emails_be_logged_to_php_error_log() ) {
